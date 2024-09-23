@@ -24,6 +24,8 @@ export const Main = () => {
         console.error('Ошибка при загрузке данных:', error);
         setIsLoading(false);
       });
+
+    window.scrollTo(0, 0);
   }, []);
 
   console.log(pizzas);
