@@ -1,6 +1,5 @@
 import React from 'react';
 
-import pizzas from '../assets/json/pizza.json';
 import '../scss/app.scss';
 import { Category } from './Components/Category';
 import { PizzaBlock } from './Components/PizzaBlock';
@@ -28,7 +27,6 @@ export const Main = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  console.log(pizzas);
   return (
     <div className="content">
       <div className="container">
