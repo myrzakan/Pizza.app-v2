@@ -9,11 +9,29 @@ import { Sort } from './Components/Sort';
 export const Main = () => {
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [categoryId, setCategoryId] = React.useState(0);
+  const [sortType, setSortType] = React.useState({
+    name: 'популярности',
+    sortProperty: 'reating',
+  });
 
   React.useEffect(() => {
-    fetch('https://66e05a9c2fb67ac16f2953b1.mockapi.io/items')
+    setIsLoading(true);
+    fetch(
+      `https://66e05a9c2fb67ac16f2953b1.mockapi.io/items?${
+        categoryId > 0 ? `category=${categoryId}` : ''
+      }&sortBy=${sortType.sortProperty}&order=asc`,
+    )
       // Парсинг ответа сервера и обновление состояния
-      .then(res => res.json())
+      .then(response => {
+        // Проверяем успешность запроса
+        if (!response.ok) {
+          // Если запрос не удался, выбрасываем ошибку
+          throw new Error('Ошибка при запросе к API');
+        }
+        // Если запрос удался, парсим ответ в JSON формат
+        return response.json();
+      })
       .then(arr => {
         setItems(arr);
         setIsLoading(false);
@@ -25,14 +43,17 @@ export const Main = () => {
       });
 
     window.scrollTo(0, 0);
-  }, []);
+  }, [categoryId, sortType]);
 
   return (
     <div className="content">
       <div className="container">
         <div className="content__top">
-          <Category />
-          <Sort />
+          <Category
+            value={categoryId}
+            onChangeCategory={i => setCategoryId(i)}
+          />
+          <Sort value={sortType} onChangeSorty={i => setSortType(i)} />
         </div>
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">
